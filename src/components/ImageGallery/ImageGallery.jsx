@@ -29,6 +29,7 @@ export class ImageGallery extends Component {
             }
         }
     }
+    
       render() {
         const { query } = this.state; 
         const elements = query
