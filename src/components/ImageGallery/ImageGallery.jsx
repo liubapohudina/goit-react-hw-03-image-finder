@@ -16,8 +16,8 @@ export class ImageGallery extends Component {
     async fetchDataAndUpdateState(search, page) {
         try {
             const response = await fetchData(search, page);
-
-            this.setState((prevState) => ({
+         console.log("data is updated")
+            await this.setState((prevState) => ({
                 totalHits: response.totalHits,
                 query: [...prevState.query, ...response.hits], 
             }));
@@ -42,14 +42,23 @@ export class ImageGallery extends Component {
     async componentDidUpdate(prevProps, prevState) {
         const { search } = this.props;
         const { page } = this.state;
+        const prevSearch = prevProps.search;
+        const nextSearch = this.props.search;
+        console.log(prevSearch)
+        console.log(nextSearch)
         if (prevProps.search !== search || prevState.page !== page) {
-            this.setState({
-                query: [],
-                page: 1,
-                search: search,
-            })
             await this.fetchDataAndUpdateState(search, page);
+            console.log("data new")
         }
+        if (prevSearch !== nextSearch) {
+                
+        this.setState((prevState) => ({
+        query: [],
+        page: 1,
+        search: nextSearch,
+    }));
+
+       }
      
     }
 
