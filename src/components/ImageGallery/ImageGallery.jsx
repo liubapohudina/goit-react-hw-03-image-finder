@@ -13,6 +13,30 @@ export class ImageGallery extends Component {
         btnLoadMore: false,
     }
 
+
+      componentDidUpdate(prevProps, prevState) {
+        const { search } = this.props;
+        const { page } = this.state;
+        const prevSearch = prevProps.search;
+        const nextSearch = this.props.search;
+        // console.log(prevSearch)
+        // console.log(nextSearch)
+        if (prevProps.search !== search || prevState.page !== page) {
+             this.fetchDataAndUpdateState(search, page);
+            console.log("data new")
+        }
+        if (prevSearch !== nextSearch) {
+                
+        this.setState((prevState) => ({
+        query: [],
+        page: 1,
+        search: nextSearch,
+    }));
+
+       }
+     
+    }
+
     async fetchDataAndUpdateState(search, page) {
         try {
             const response = await fetchData(search, page);
@@ -29,7 +53,7 @@ export class ImageGallery extends Component {
                     btnLoadMore: true,
                 })
             }
-            if (response.hits.length < 12) {
+            if (response.hits.length <= 11) {
                 this.setState({
                     btnLoadMore: false,
                 })
@@ -39,28 +63,7 @@ export class ImageGallery extends Component {
         }
     }
 
-    async componentDidUpdate(prevProps, prevState) {
-        const { search } = this.props;
-        const { page } = this.state;
-        const prevSearch = prevProps.search;
-        const nextSearch = this.props.search;
-        console.log(prevSearch)
-        console.log(nextSearch)
-        if (prevProps.search !== search || prevState.page !== page) {
-            await this.fetchDataAndUpdateState(search, page);
-            console.log("data new")
-        }
-        if (prevSearch !== nextSearch) {
-                
-        this.setState((prevState) => ({
-        query: [],
-        page: 1,
-        search: nextSearch,
-    }));
-
-       }
-     
-    }
+   
 
 
 //    async handleClick(event) {
