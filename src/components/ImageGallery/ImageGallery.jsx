@@ -26,12 +26,12 @@ export class ImageGallery extends Component {
             console.log("data new")
         }
         if (prevSearch !== nextSearch) {
-                
-        this.setState((prevState) => ({
-        query: [],
-        page: 1,
-        search: nextSearch,
-    }));
+            this.setState({
+            query: [],
+            page: 1,
+            search: nextSearch,
+        });
+
 
        }
      
