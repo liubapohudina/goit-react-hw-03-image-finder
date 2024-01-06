@@ -10,6 +10,7 @@ export class ImageGallery extends Component {
         totalHits: 0,
         page: 1,
         query: [],
+        btnLoadMore: false,
     }
 
     async fetchDataAndUpdateState(search, page) {
@@ -20,9 +21,18 @@ export class ImageGallery extends Component {
                 totalHits: response.totalHits,
                 query: [...prevState.query, ...response.hits], 
             }));
-
             if (response.hits.length === 0) {
                 toast.warn("Not found pictures!");
+            }
+            if (response.totalHits > 12) {
+                this.setState({
+                    btnLoadMore: true,
+                })
+            }
+            if (response.hits.length < 12) {
+                this.setState({
+                    btnLoadMore: false,
+                })
             }
         } catch {
             toast.error("Something wrong...");
@@ -33,8 +43,14 @@ export class ImageGallery extends Component {
         const { search } = this.props;
         const { page } = this.state;
         if (prevProps.search !== search || prevState.page !== page) {
+            this.setState({
+                query: [],
+                page: 1,
+                search: search,
+            })
             await this.fetchDataAndUpdateState(search, page);
         }
+     
     }
 
 
@@ -53,13 +69,10 @@ export class ImageGallery extends Component {
     // }
     
         handleClick = async () => {
-        const { search } = this.props;
             const { page } = this.state;
             this.setState({
                 page: page + 1,
             })
-        console.log(search, page);
-        //await this.fetchDataAndUpdateState(search, page);
     };
 
 
@@ -89,7 +102,7 @@ export class ImageGallery extends Component {
         return (
             <div className={styles.blockCards}>
                 <ul className={styles.gallery}>{elements}</ul>
-                {this.state.totalHits > 12 ? <Button handleOnClickBtn={this.handleClick} /> : null}
+                {this.state.btnLoadMore && <Button handleOnClickBtn={this.handleClick} />}
             </div>
         );
     }
