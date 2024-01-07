@@ -18,8 +18,8 @@ export class ImageGallery extends Component {
       componentDidUpdate(prevProps, prevState) {
         const { search } = this.props;
         const { page } = this.state;
-        const prevSearch = prevProps.search;
-        const nextSearch = this.props.search;
+        // const prevSearch = prevProps.search;
+        // const nextSearch = this.props.search;
         // console.log(prevSearch)
         // console.log(nextSearch)
         if (prevProps.search !== search || prevState.page !== page) {
