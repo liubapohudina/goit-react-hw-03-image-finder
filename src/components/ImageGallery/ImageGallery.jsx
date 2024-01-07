@@ -5,6 +5,7 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { toast } from 'react-toastify';
 import { Button } from '../Button/Button';
 
+
 export class ImageGallery extends Component {
     state = {
         totalHits: 0,
@@ -23,25 +24,32 @@ export class ImageGallery extends Component {
         // console.log(nextSearch)
         if (prevProps.search !== search || prevState.page !== page) {
              this.fetchDataAndUpdateState(search, page);
-            console.log("data new")
+            console.log('block if || update')
+            
         }
-        if (prevSearch !== nextSearch) {
+        if (prevProps.search !== search) {
             this.setState({
             query: [],
             page: 1,
-            search: nextSearch,
+            search: search,
         });
+            console.log("block if update when search is different")
+            console.log(this.state.query)
+            console.log(this.state.page)
+            console.log(this.state.search)
 
-
-       }
+      }
      
     }
 
-    async fetchDataAndUpdateState(search, page) {
+    fetchDataAndUpdateState = async () => {
+        const { page } = this.state;
+        const { search } = this.props;
+        const response = await fetchData(search, page);
         try {
-            const response = await fetchData(search, page);
+            
          console.log("data is updated")
-            await this.setState((prevState) => ({
+             this.setState((prevState) => ({
                 totalHits: response.totalHits,
                 query: [...prevState.query, ...response.hits], 
             }));
@@ -85,6 +93,7 @@ export class ImageGallery extends Component {
             this.setState({
                 page: page + 1,
             })
+            console.log("click btn")
     };
 
 
@@ -119,3 +128,6 @@ export class ImageGallery extends Component {
         );
     }
 }
+
+
+
