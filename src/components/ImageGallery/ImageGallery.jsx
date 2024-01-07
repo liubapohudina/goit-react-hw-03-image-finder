@@ -12,51 +12,42 @@ export class ImageGallery extends Component {
         page: 1,
         query: [],
         btnLoadMore: false,
+        search: '',
     }
 
+    componentDidUpdate(prevProps, prevState) {
+    const { page, search } = this.state;
+    const prevSearch = prevProps.search;
+    const nextSearch = this.props.search;
 
-      componentDidUpdate(prevProps, prevState) {
-        const { search } = this.props;
-        const { page } = this.state;
-        // const prevSearch = prevProps.search;
-        // const nextSearch = this.props.search;
-        // console.log(prevSearch)
-        // console.log(nextSearch)
-        if (prevProps.search !== search || prevState.page !== page) {
-             this.fetchDataAndUpdateState(search, page);
-            console.log('block if || update')
-            
-        }
-        if (prevProps.search !== search) {
-            this.setState({
+        if (prevSearch !== nextSearch) {
+        this.setState({
             query: [],
             page: 1,
-            search: search,
-        });
-            console.log("block if update when search is different")
-            console.log(this.state.query)
-            console.log(this.state.page)
-            console.log(this.state.search)
+            search: nextSearch,
+         });
+        }
+        if (prevState.search !== search || prevState.page !== page) {
+            this.fetchDataAndUpdateState();
+            return;
+            }
+}
 
-      }
-     
-    }
+    
 
     fetchDataAndUpdateState = async () => {
-        const { page } = this.state;
-        const { search } = this.props;
+        const { page, query } = this.state;
+        const  { search } = this.props;
         const response = await fetchData(search, page);
         try {
-            
-         console.log("data is updated")
-             this.setState((prevState) => ({
-                totalHits: response.totalHits,
-                query: [...prevState.query, ...response.hits], 
-            }));
             if (response.hits.length === 0) {
                 toast.warn("Not found pictures!");
+                this.setState({
+                    query: [],
+                    page: 1,
+                })
             }
-            if (response.totalHits > 12) {
+                if (response.totalHits > 12) {
                 this.setState({
                     btnLoadMore: true,
                 })
@@ -66,49 +57,27 @@ export class ImageGallery extends Component {
                     btnLoadMore: false,
                 })
             }
+              this.setState({
+                totalHits: response.totalHits,
+                 query: [...query, ...response.hits],
+             });
+        
+        
         } catch {
             toast.error("Something wrong...");
         }
     }
 
-   
 
-
-//    async handleClick(event) {
-//     const isBtn = event.target.closest('button');
-//     if (isBtn) {
-//         this.setState((prevState) => ({
-//             page: prevState.page + 1,
-//         }), async () => {
-//             const { search } = this.props;
-//             const { page } = this.state;
-//             console.log(search, page);
-//             await this.fetchDataAndUpdateState(search, page);
-//         });
-//     }
-    // }
     
         handleClick = async () => {
             const { page } = this.state;
             this.setState({
                 page: page + 1,
             })
-            console.log("click btn")
     };
 
 
-    // async handleClick (event)  {
-    //     const isBtn = event.target.closest('button');
-    //     if (isBtn) {
-    //         this.setState((prevState) => ({
-    //             page: prevState.page + 1,
-    //         }))
-    //         const { search } = this.props;
-    //         const { page } = this.state;
-    //         console.log(search,page)
-    //         await this.fetchDataAndUpdateState(search, page);
-    //     }
-    // };
 
 
     render() {
@@ -128,6 +97,7 @@ export class ImageGallery extends Component {
         );
     }
 }
+
 
 
 
