@@ -1,9 +1,13 @@
 import styles from './searchbar.module.css';
+import PropTypes from "prop-types";
 import { CiSearch } from "react-icons/ci";
 import { Component } from 'react';
 import { toast } from 'react-toastify';
 
 export class Searchbar extends Component  {
+  static propTypes = {
+    handleClick: PropTypes.func,
+  }
   state = {
   search : '',
 }

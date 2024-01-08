@@ -1,18 +1,24 @@
 import styles from './imageGallery.module.css';
+import PropTypes from "prop-types";
 import { fetchData } from 'helpers/helpers';
 import { Component } from 'react';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { toast } from 'react-toastify';
 import { Button } from '../Button/Button';
+import { Loader } from 'components/Loader/Loader';
 
 
 export class ImageGallery extends Component {
+    static propTypes = {
+        search: PropTypes.string.isRequired,
+    }
     state = {
         totalHits: 0,
         page: 1,
         query: [],
         btnLoadMore: false,
         search: '',
+        isLoading: false,
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -37,7 +43,10 @@ export class ImageGallery extends Component {
 
     fetchDataAndUpdateState = async () => {
         const { page, query } = this.state;
-        const  { search } = this.props;
+        const { search } = this.props;
+        this.setState({
+            isLoading: true,
+        })
         const response = await fetchData(search, page);
         try {
             if (response.hits.length === 0) {
@@ -65,6 +74,10 @@ export class ImageGallery extends Component {
         
         } catch {
             toast.error("Something wrong...");
+        } finally {
+            this.setState({
+                isLoading: false,
+            })
         }
     }
 
@@ -81,7 +94,7 @@ export class ImageGallery extends Component {
 
 
     render() {
-        const { query } = this.state;
+        const { query, isLoading, btnLoadMore } = this.state;
 
         const elements = query
             ? query.map(({ id, webformatURL }) => (
@@ -92,12 +105,11 @@ export class ImageGallery extends Component {
         return (
             <div className={styles.blockCards}>
                 <ul className={styles.gallery}>{elements}</ul>
-                {this.state.btnLoadMore && <Button handleOnClickBtn={this.handleClick} />}
+                {isLoading ? <Loader /> : btnLoadMore &&  <Button handleOnClickBtn={this.handleClick} />}
+
             </div>
         );
     }
 }
-
-
 
 
