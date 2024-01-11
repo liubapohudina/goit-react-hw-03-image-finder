@@ -24,8 +24,9 @@ export class Modal extends Component {
     
 
     handleClickElement = (event) => {
-        const currentClickItem = event.target;
-        if (currentClickItem) {
+      const currentClickItem = event.target.nodeName;
+      console.log(currentClickItem)
+        if (currentClickItem  === "DIV") {
             this.props.closeModal();
         }
     }
