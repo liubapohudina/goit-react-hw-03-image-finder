@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import { nanoid } from 'nanoid';
 
 
-export function ImageGalleryItem({ id, src }) {
+export function ImageGalleryItem({ id, src, alt, handleClick }) {
+    const pathToImage = src.original;
     const key = nanoid()
     return (
-        <li className={styles.photoCard} id={id} key={key}>
-                <img loading='lazy' className={styles.photo} src={src} alt="pictur" />
+        <li className={styles.photoCard} key={key} onClick={() => handleClick(id)}>
+                <img  id={id} loading='lazy' className={styles.photo} src={pathToImage} alt={alt} />
             </li>
             
     )
@@ -15,5 +16,7 @@ export function ImageGalleryItem({ id, src }) {
 
 ImageGalleryItem.propTypes = {
     id: PropTypes.number,
-    src: PropTypes.string.isRequired,
+    src: PropTypes.object.isRequired,
+    alt: PropTypes.string.isRequired,
+    handleClick: PropTypes.func.isRequired,
 }

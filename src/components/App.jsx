@@ -19,7 +19,8 @@ export class App extends Component {
 
   handleClickSubmit = search => {
     this.setState({search})
- } 
+  } 
+  
 
   render() {
     if (this.state.hasError) {
