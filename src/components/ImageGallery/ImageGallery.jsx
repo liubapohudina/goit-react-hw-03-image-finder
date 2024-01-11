@@ -9,6 +9,7 @@ import { Loader } from 'components/Loader/Loader';
 import { Modal } from 'components/Modal/Modal';
 
 
+
 export class ImageGallery extends Component {
     static propTypes = {
         search: PropTypes.string.isRequired,
@@ -89,7 +90,6 @@ export class ImageGallery extends Component {
         }
     }
 
-
     
     handleClickLoadMore = async () => {
             const { page } = this.state;
@@ -110,10 +110,6 @@ export class ImageGallery extends Component {
         }
     }
    
-    
-
-
-
 
 
     render() {
@@ -121,16 +117,18 @@ export class ImageGallery extends Component {
     
         const elements = query
             ? query.map(({ id, src, alt }) => (
-                <ImageGalleryItem id={id} src={src} key={id} alt={alt} handleClick={this.handleClickGalleryItem}/>
+                <ImageGalleryItem id={id} src={src} key={id} alt={alt} handleClick={this.handleClickGalleryItem} />
             ))
             : null;
 
         return (
+            <div className='listImages'>
             <div className={styles.blockCards}>
                 <ul className={styles.gallery}>{elements}</ul>
                 {isLoading ? <Loader /> : btnLoadMore &&  <Button handleOnClickBtn={this.handleClickLoadMore} />}
                 {isModal && <Modal arrayItem={this.state.modalItem} closeModal={() => this.setState({ isModal: false })}/>}
-            </div>
+                </div>
+                </div>
         );
     }
 }

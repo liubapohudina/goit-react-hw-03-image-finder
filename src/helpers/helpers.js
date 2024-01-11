@@ -14,3 +14,8 @@ export async function fetchData(search, page) {
 export function setLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
+
+
+
+
+
